@@ -19,7 +19,7 @@ dag = DAG(
 
 run_crypto_etl = BashOperator(
     task_id='run_crypto_etl',
-    bash_command='cd /mnt/d/work/crypto-etl-project && docker-compose up --exit-code-from crypto-etl',
+    bash_command='docker run --rm --network host -e DB_HOST=host.docker.internal crypto-etl',
     dag=dag,
 )
 
