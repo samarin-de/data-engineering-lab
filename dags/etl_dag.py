@@ -9,8 +9,8 @@ import requests
 logger = logging.getLogger(__name__)
 
 # ВСТАВЬТЕ СВОИ ДАННЫЕ ↓↓↓
-TELEGRAM_TOKEN = '8897904426:AAFrVNCSzsC9PSRa0cwfJqeVEtYBglU-UBE'
-TELEGRAM_CHAT_ID = '1355480201'
+TELEGRAM_TOKEN = ''
+TELEGRAM_CHAT_ID = ''
 # ↑↑↑ ВСТАВЬТЕ СВОИ ДАННЫЕ
 
 def send_telegram_message(message):
