@@ -8,8 +8,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Твои данные для Telegram
-TELEGRAM_TOKEN = '8897904426:AAFrVNCSzsC9PSRa0cwfJqeVEtYBglU-UBE'
-TELEGRAM_CHAT_ID = '1355480201'
+TELEGRAM_TOKEN = ''
+TELEGRAM_CHAT_ID = ''
 
 def send_telegram_message(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
