@@ -1,5 +1,4 @@
 # Data Engineering Lab
-
 Мои учебные проекты по Data Engineering.
 
 ## Стек технологий
