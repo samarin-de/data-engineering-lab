@@ -12,3 +12,5 @@ for coin in coins:
 	if coin not in unique_coins_2:
 		unique_coins_2.append(coin)
 print("Способ 2 (цикл):", unique_coins_2)
+
+#
