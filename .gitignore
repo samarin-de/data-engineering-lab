@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment variables (пароли)
+.env
+
+# Docker volumes (данные базы)
+postgres_data/
+
+# Логи
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/

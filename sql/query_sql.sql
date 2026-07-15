@@ -31,3 +31,31 @@ ORDER BY c.full_name, d.full_date;
  Planning Time: 0.144 ms
  Execution Time: 0.089 ms
 */
+
+--===================================================
+--LEFT JOIN
+SELECT
+    c.full_name AS coin_name,
+    COUNT(f.price_usd) AS recods_count,
+    MIN(d.full_date) AS first_date,
+    MAX(d.full_date) AS last_date
+FROM dim_coins c 
+LEFT JOIN fact_crypto_rates f ON c.coin_id = f.coin_id
+LEFT JOIN dim_calendar d ON f.date_id = d.date_id
+GROUP BY c.full_name
+ORDER BY c.full_name;
+
+--================================================
+--EXPLAIN ANALYZE
+EXPLAIN ANALYZE
+SELECT
+    c.full_name AS coin_name,
+    COUNT(f.price_usd) AS recods_count,
+    MIN(d.full_date) AS first_date,
+    MAX(d.full_date) AS last_date
+FROM dim_coins c
+LEFT JOIN fact_crypto_rates f ON c.coin_id = f.coin_id
+LEFT JOIN dim_calendar d ON f.date_id = d.date_id
+GROUP BY c.full_name
+ORDER BY c.full_name;
+--=================================================
