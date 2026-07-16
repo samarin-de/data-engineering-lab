@@ -59,3 +59,22 @@ LEFT JOIN dim_calendar d ON f.date_id = d.date_id
 GROUP BY c.full_name
 ORDER BY c.full_name;
 --=================================================
+--INDEX
+EXPLAIN ANALYZE
+SELECT * FROM fact_crypto_rates
+WHERE coin_id = 1; -- Bitcoin coin_id = 1
+
+--создать индекс coin_id
+CREATE INDEX idx_fact_coin_id ON fact_crypto_rates(coin_id);
+--На маленькой таблице индекс не используется автоматически, 
+--но при большом объёме данных ускоряет запрос
+SET enable_seqscan = off; --on
+--===================
+DROP INDEX idx_fact_coin_id;
+--Составной индекс
+CREATE INDEX idx_fact_coin_date ON fact_crypto_rates(coin_id, date_id);
+--На малых данных индекс не используется оптимизатором PostgreSQL 
+EXPLAIN ANALYZE
+SELECT * FROM fact_crypto_rates
+WHERE coin_id = 1
+ORDER BY date_id;
