@@ -71,6 +71,10 @@ CREATE INDEX idx_fact_coin_id ON fact_crypto_rates(coin_id);
 SET enable_seqscan = off; --on
 --===================
 DROP INDEX idx_fact_coin_id;
+-- ============================================
+-- Эксперимент с составным индексом
+-- Цель: проверить, как индекс (coin_id, date_id) 
+-- План выполнения (результат):
 --Составной индекс
 CREATE INDEX idx_fact_coin_date ON fact_crypto_rates(coin_id, date_id);
 --На малых данных индекс не используется оптимизатором PostgreSQL 
@@ -78,3 +82,19 @@ EXPLAIN ANALYZE
 SELECT * FROM fact_crypto_rates
 WHERE coin_id = 1
 ORDER BY date_id;
+
+/*
+ Sort  (cost=1.06..1.06 rows=1 width=72) (actual time=0.011..0.011 rows=2 loops=1)
+   Sort Key: date_id
+   Sort Method: quicksort  Memory: 25kB
+   ->  Seq Scan on fact_crypto_rates  (cost=0.00..1.05 rows=1 width=72) (actual time=0.006..0.007 rows=2 loops=1)
+         Filter: (coin_id = 1)
+         Rows Removed by Filter: 2
+ Planning Time: 0.150 ms
+ Execution Time: 0.031 ms
+*/
+
+-- Вывод: на малой таблице индекс не используется, 
+-- PostgreSQL предпочитает Seq Scan + сортировку в памяти.
+-- На больших данных (миллионы строк) этот индекс позволил бы 
+-- выполнить Index Scan без отдельной сортировки.
