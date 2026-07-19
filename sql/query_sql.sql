@@ -138,4 +138,5 @@ LEFT JOIN fact_crypto_rates f_prev
         WHERE d_prev.full_date = d.full_date - INTERVAL '1 day'
     )
 ORDER BY c.full_name, d.full_date;
+
 --Этот запрос покажет, как связывать строки с предыдущим днем без оконных функций
