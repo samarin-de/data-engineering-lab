@@ -98,3 +98,44 @@ ORDER BY date_id;
 -- PostgreSQL предпочитает Seq Scan + сортировку в памяти.
 -- На больших данных (миллионы строк) этот индекс позволил бы 
 -- выполнить Index Scan без отдельной сортировки.
+
+--===========================Запрос с ROLLUP
+SELECT
+    c.full_name,
+    AVG(f.price_usd) AS avg_price
+FROM fact_crypto_rates f
+JOIN dim_coins c ON f.coin_id = c.coin_id
+GROUP BY ROLLUP(c.full_name);
+--Результат: Ты увидишь среднюю цену для Bitcoin, Ethereum, Solana,
+-- и в последней строке — NULL и общую среднюю по всем монетам
+
+--=================Рекурсивный CTE (Иерархия)
+WITH RECURSIVE date_series AS (
+    SELECT '2026-07-01'::date AS gen_date
+    UNION ALL
+    SELECT (gen_date + INTERVAL '1 day')::date
+    FROM date_series
+    WHERE gen_date < '2026-07-14'::date
+)
+SELECT * FROM date_series;
+--Этот запрос построит непрерывный список дат
+--В реальной жизни это используется, чтобы не было дыр в датах на дашборде
+
+--===========SELF JOIN (Вместо LAG)
+SELECT
+    c.full_name,
+    d.full_date,
+    f.price_usd,
+    f_prev.price_usd AS prev_price
+FROM fact_crypto_rates f
+JOIN dim_coins c ON f.coin_id = c.coin_id
+JOIN dim_calendar d ON f.date_id = d.date_id
+LEFT JOIN fact_crypto_rates f_prev
+    ON f.coin_id = f_prev.coin_id
+    AND f_prev.date_id = (
+        SELECT date_id
+        FROM dim_calendar d_prev
+        WHERE d_prev.full_date = d.full_date - INTERVAL '1 day'
+    )
+ORDER BY c.full_name, d.full_date;
+--Этот запрос покажет, как связывать строки с предыдущим днем без оконных функций
