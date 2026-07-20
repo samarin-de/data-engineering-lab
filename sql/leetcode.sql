@@ -22,7 +22,7 @@ SELECT score, rank
 FROM ranked
 ORDER BY rank;
 
----180
+---180 LAG()
 WITH lagged AS (
     SELECT
     id,
@@ -34,3 +34,9 @@ WITH lagged AS (
 SELECT DISTINCT num AS ConsecutiveNums
 FROM lagged
 WHERE num=prev1 AND num=prev2;
+---SELF JOIN
+SELECT DISTINCT a.num AS ConsecutiveNums
+FROM Logs a
+JOIN Logs b ON a.id = b.id - 1 AND a.num = b.num
+JOIN Logs c ON b.id = c.id - 1 AND b.num = c.num;
+
