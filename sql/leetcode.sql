@@ -11,3 +11,13 @@ WITH ranked AS (
 SELECT MAX(salary) AS SecondHighestSalary
 FROM ranked
 WHERE rnk = 2;
+
+--178
+WITH ranked AS (
+    SELECT score,
+    DENSE_RANK() OVER (ORDER BY score DESC) AS rank
+    FROM Scores
+)
+SELECT score, rank
+FROM ranked
+ORDER BY rank;
