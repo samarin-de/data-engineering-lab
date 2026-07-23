@@ -1,6 +1,6 @@
 def two_sum(nums, target):
     seen = {} # здесь будет хеш-таблица(словарь)
-    for i, num in emumerate(nums):
+    for i, num in enumerate(nums):
         complement = target - num
         # проверрка в словаре происходит Мгновенно (О(1)), без перебора!
         if complement in seen:
